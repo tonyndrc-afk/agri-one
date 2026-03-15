@@ -1,0 +1,2732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgriOne — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Figtree:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & BASE ─────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+/* ─── DESIGN TOKENS ────────────────────────────── */
+:root {
+  /* PALETTE — Primaires (fond clair) */
+  --emerald-900: #051409;
+  --emerald-800: #F8FAF9;
+  --emerald-750: #F0F5F2;
+  --emerald-700: #FFFFFF;
+  --emerald-600: #E8F0EB;
+  --emerald-500: #D0DDD5;
+  --emerald-400: #B8CCBf;
+  --emerald-300: #3A7A4C;
+
+  /* PALETTE — Brand Verts */
+  --green-deep:   #0F7A4A;
+  --green-core:   #1DB863;
+  --green-bright: #42D97E;
+  --green-glow:   #68F5A0;
+  --green-mist:   #C2F5D8;
+
+  /* PALETTE — Tech/Circuit */
+  --silver-dark:  #6B7C74;
+  --silver-mid:   #4A5C54;
+  --silver-light: #2D3B35;
+  --silver-pale:  #1A2620;
+
+  /* PALETTE — Sémantiques */
+  --warning:      #D4920A;
+  --warning-bg:   #FFF8E6;
+  --danger:       #D63030;
+  --danger-bg:    #FFF0F0;
+  --info:         #2B7ED6;
+  --info-bg:      #EBF4FF;
+  --success:      #0F9A50;
+  --success-bg:   #ECFDF3;
+
+  /* TYPOGRAPHIE */
+  --font-display: 'Unbounded', sans-serif;
+  --font-body:    'Figtree', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  /* ÉCHELLE TYPO */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+  --text-hero: 4.5rem;
+
+  /* ESPACEMENT */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-16:  64px;
+  --space-20:  80px;
+  --space-24:  96px;
+
+  /* BORDER RADIUS */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-2xl:  32px;
+  --radius-full: 9999px;
+
+  /* OMBRES (teintées vert) */
+  --shadow-sm:   0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg:   0 8px 32px rgba(0, 0, 0, 0.10);
+  --shadow-glow: 0 0 24px rgba(29, 184, 99, 0.20);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+  /* ANIMATIONS */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+}
+
+/* ─── BODY ──────────────────────────────────────── */
+body {
+  font-family: var(--font-body);
+  background-color: #FFFFFF;
+  color: #1A2620;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── GRAIN OVERLAY ────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.015;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── GRID CIRCUIT BACKGROUND ─────────────────── */
+.circuit-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(29, 184, 99, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29, 184, 99, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+/* ─── CONTAINER ────────────────────────────────── */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-8);
+}
+
+/* ─── SECTION ──────────────────────────────────── */
+section {
+  padding: var(--space-20) 0;
+  border-bottom: 1px solid #E5E9E7;
+}
+section:last-child { border-bottom: none; }
+
+/* ─── SECTION HEADER ───────────────────────────── */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green-core);
+  margin-bottom: var(--space-2);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: #1A2620;
+  margin-bottom: var(--space-2);
+  line-height: 1.1;
+}
+.section-sub {
+  font-size: var(--text-base);
+  color: var(--silver-mid);
+  margin-bottom: var(--space-10);
+  max-width: 520px;
+}
+
+/* ═══════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #E5E9E7;
+}
+
+/* Organic blob background */
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  right: -200px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: radial-gradient(ellipse at center,
+    rgba(15, 122, 74, 0.08) 0%,
+    rgba(29, 184, 99, 0.04) 40%,
+    transparent 70%
+  );
+  border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
+  animation: morphBlob 12s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes morphBlob {
+  0%   { border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%; }
+  33%  { border-radius: 40% 60% 30% 70% / 60% 40% 60% 40%; }
+  66%  { border-radius: 70% 30% 50% 50% / 40% 70% 30% 60%; }
+  100% { border-radius: 50% 50% 40% 60% / 70% 30% 60% 40%; }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: #ECFDF3;
+  border: 1px solid #B8E6CC;
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--green-deep);
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-6);
+  width: fit-content;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green-core);
+  box-shadow: 0 0 8px var(--green-core);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.8); }
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, var(--text-hero));
+  font-weight: 900;
+  line-height: 0.95;
+  color: #1A2620;
+  margin-bottom: var(--space-6);
+}
+
+.hero-title .accent {
+  background: linear-gradient(135deg, var(--green-core) 0%, var(--green-bright) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: var(--text-lg);
+  color: var(--silver-light);
+  max-width: 560px;
+  margin-bottom: var(--space-10);
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.hero-stats {
+  display: flex;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-stat-value {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--green-core);
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--silver-mid);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Scroll indicator */
+.hero-scroll {
+  position: absolute;
+  bottom: var(--space-8);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--green-core), transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+  0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+  50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+}
+
+.scroll-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--silver-dark);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════
+   PALETTE
+═══════════════════════════════════════════════════ */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+
+.swatch {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--duration-base) var(--ease-spring);
+  position: relative;
+}
+
+.swatch:hover { transform: translateY(-4px) scale(1.02); }
+
+.swatch-color {
+  height: 80px;
+  position: relative;
+}
+
+.swatch-color::after {
+  content: '✓ Copié';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+  letter-spacing: 0.05em;
+}
+
+.swatch.copied .swatch-color::after { opacity: 1; }
+
+.swatch-info {
+  background: #F5F7F6;
+  padding: var(--space-3) var(--space-3);
+}
+
+.swatch-name {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: #1A2620;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.swatch-hex {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--silver-mid);
+}
+
+.swatch-usage {
+  font-size: 10px;
+  color: var(--silver-dark);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+.palette-group-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--green-core);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+/* ═══════════════════════════════════════════════════
+   TYPOGRAPHIE
+═══════════════════════════════════════════════════ */
+.type-scale {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.type-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: var(--space-6);
+  align-items: baseline;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid #E5E9E7;
+}
+
+.type-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.type-token {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--green-core);
+}
+
+.type-spec {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--silver-dark);
+}
+
+.font-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  margin-bottom: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.font-name {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--green-core);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.font-role {
+  background: #ECFDF3;
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+  font-size: 10px;
+  color: var(--green-deep);
+}
+
+.font-sample-display {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1A2620;
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+
+.font-sample-body {
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  color: var(--silver-light);
+  line-height: 1.6;
+}
+
+.font-sample-mono {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  color: var(--green-bright);
+}
+
+.font-weights {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-4);
+}
+
+.weight-tag {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  background: #F5F7F6;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  color: #4A5C54;
+}
+
+/* ═══════════════════════════════════════════════════
+   COMPOSANTS
+═══════════════════════════════════════════════════ */
+
+/* Buttons */
+.component-row {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  padding: 14px var(--space-6);
+  cursor: pointer;
+  border: none;
+  transition: all var(--duration-base) var(--ease-smooth);
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.05);
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+}
+
+.btn:hover::after { opacity: 1; }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-core) 100%);
+  color: white;
+  box-shadow: var(--shadow-md), 0 0 0 0 rgba(29, 184, 99, 0);
+  transition: all var(--duration-base) var(--ease-smooth);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(29, 184, 99, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--green-core);
+  border: 1.5px solid var(--green-core);
+}
+
+.btn-secondary:hover {
+  background: rgba(29, 184, 99, 0.08);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  background: #F5F7F6;
+  color: #4A5C54;
+  border: 1px solid #E5E9E7;
+}
+
+.btn-ghost:hover {
+  background: #E5E9E7;
+  color: #1A2620;
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background: rgba(232, 64, 64, 0.12);
+  color: var(--danger);
+  border: 1px solid rgba(232, 64, 64, 0.3);
+}
+
+.btn-danger:hover {
+  background: rgba(232, 64, 64, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-sm { padding: 10px var(--space-4); font-size: var(--text-xs); }
+.btn-lg { padding: 18px var(--space-8); font-size: var(--text-base); }
+
+/* ─── IoT SENSOR CARDS ────────────────────────── */
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.sensor-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--duration-base) var(--ease-smooth);
+  box-shadow: var(--shadow-sm);
+}
+
+.sensor-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--green-core), var(--green-bright));
+}
+
+/* Scan line effect on hover */
+.sensor-card::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(29, 184, 99, 0.04),
+    transparent
+  );
+  transition: top 0.6s ease;
+  pointer-events: none;
+}
+
+.sensor-card:hover::after { top: 150%; }
+.sensor-card:hover {
+  border-color: #B8E6CC;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.sensor-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: rgba(29, 184, 99, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-3);
+  font-size: 18px;
+}
+
+.sensor-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--silver-mid);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-1);
+}
+
+.sensor-value {
+  font-family: var(--font-mono);
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #1A2620;
+  line-height: 1;
+  margin-bottom: var(--space-1);
+}
+
+.sensor-unit {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--green-core);
+  font-weight: 400;
+}
+
+.sensor-trend {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--silver-mid);
+  margin-top: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.trend-up { color: var(--green-core); }
+.trend-down { color: var(--danger); }
+.trend-stable { color: var(--silver-mid); }
+
+/* Animated value bar */
+.sensor-bar {
+  width: 100%;
+  height: 3px;
+  background: #E5E9E7;
+  border-radius: var(--radius-full);
+  margin-top: var(--space-3);
+  overflow: hidden;
+}
+
+.sensor-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--green-deep), var(--green-bright));
+  animation: barGrow 1.5s var(--ease-smooth) forwards;
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+@keyframes barGrow {
+  to { transform: scaleX(1); }
+}
+
+/* Alert states */
+.sensor-card.warning {
+  border-color: rgba(245, 166, 35, 0.3);
+}
+.sensor-card.warning::before {
+  background: linear-gradient(90deg, var(--warning), #FFD580);
+}
+.sensor-card.warning .sensor-value { color: var(--warning); }
+
+.sensor-card.danger {
+  border-color: rgba(232, 64, 64, 0.3);
+}
+.sensor-card.danger::before {
+  background: linear-gradient(90deg, var(--danger), #FF8080);
+}
+.sensor-card.danger .sensor-value { color: var(--danger); }
+
+/* ─── STATUS BADGES ────────────────────────────── */
+.badge-row {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.badge::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.badge-active   { background: rgba(29, 184, 99, 0.10); color: var(--green-deep); }
+.badge-growth   { background: rgba(66, 217, 126, 0.10); color: #0A7A3E; }
+.badge-warning  { background: rgba(245, 166, 35, 0.10); color: #9A6200; }
+.badge-danger   { background: rgba(232, 64, 64, 0.10); color: #B32020; }
+.badge-info     { background: rgba(59, 155, 246, 0.10); color: #1A5CB3; }
+.badge-offline  { background: rgba(122, 139, 132, 0.10); color: #6B7C74; }
+
+/* Animated badge */
+.badge-active::before {
+  animation: pulse 2s infinite;
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* ─── PLANT CARDS ──────────────────────────────── */
+.plant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.plant-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: all var(--duration-base) var(--ease-smooth);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.plant-card:hover {
+  border-color: var(--green-core);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.plant-card-image {
+  height: 140px;
+  background: linear-gradient(135deg, #ECFDF3 0%, #D1FAE5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.plant-card-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, #FFFFFF);
+}
+
+.plant-card-body {
+  padding: var(--space-5);
+}
+
+.plant-name {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: #1A2620;
+  margin-bottom: var(--space-1);
+}
+
+.plant-variety {
+  font-size: var(--text-xs);
+  color: var(--silver-mid);
+  font-family: var(--font-mono);
+  margin-bottom: var(--space-4);
+}
+
+.plant-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.plant-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.plant-metric-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--green-core);
+}
+
+.plant-metric-label {
+  font-size: 10px;
+  color: var(--silver-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.plant-progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.progress-name {
+  font-size: var(--text-xs);
+  color: var(--silver-mid);
+}
+
+.progress-pct {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--green-core);
+}
+
+.progress-track {
+  width: 100%;
+  height: 4px;
+  background: #E5E9E7;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green-deep), var(--green-bright));
+  border-radius: var(--radius-full);
+  transition: width 1s var(--ease-smooth);
+}
+
+/* ─── INPUT FIELDS ─────────────────────────────── */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 480px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--silver-light);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.field-input {
+  background: #FFFFFF;
+  border: 1.5px solid #D0DDD5;
+  border-radius: var(--radius-md);
+  padding: 14px var(--space-4);
+  color: #1A2620;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  outline: none;
+  transition: all var(--duration-base) var(--ease-smooth);
+  width: 100%;
+}
+
+.field-input::placeholder { color: #9CA8A2; }
+
+.field-input:focus {
+  border-color: var(--green-core);
+  box-shadow: 0 0 0 3px rgba(29, 184, 99, 0.12);
+  background: #FFFFFF;
+}
+
+.field-input.error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(232, 64, 64, 0.10);
+}
+
+.field-input.success {
+  border-color: var(--green-core);
+  box-shadow: 0 0 0 3px rgba(29, 184, 99, 0.10);
+}
+
+.field-hint {
+  font-size: var(--text-xs);
+  color: var(--silver-dark);
+}
+
+.field-hint.error-hint { color: #FF8080; }
+.field-hint.success-hint { color: var(--green-bright); }
+
+/* ─── NAVIGATION TABS ──────────────────────────── */
+.nav-demo {
+  background: #FFFFFF;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-xl);
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  gap: var(--space-2);
+  width: fit-content;
+  margin-bottom: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-tab {
+  padding: 10px var(--space-5);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--silver-mid);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--ease-smooth);
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.nav-tab:hover { color: #1A2620; background: #F5F7F6; }
+
+.nav-tab.active {
+  background: rgba(29, 184, 99, 0.12);
+  color: var(--green-bright);
+  border: 1px solid rgba(29, 184, 99, 0.2);
+}
+
+/* ─── BOTTOM NAV MOBILE ────────────────────────── */
+.mobile-nav {
+  background: #FFFFFF;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-xl);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+  width: 360px;
+  margin-bottom: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-2) var(--space-2);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--ease-smooth);
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 10px;
+  color: var(--silver-dark);
+}
+
+.nav-item:hover { color: var(--silver-mid); }
+
+.nav-item.active { color: var(--green-core); }
+
+.nav-item .nav-icon { font-size: 22px; }
+
+/* ─── TOAST NOTIFICATIONS ──────────────────────── */
+.toast-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 380px;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid;
+  animation: toastIn var(--duration-slow) var(--ease-spring) both;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.toast-success {
+  background: rgba(29, 184, 99, 0.08);
+  border-color: rgba(29, 184, 99, 0.25);
+}
+
+.toast-warning {
+  background: rgba(245, 166, 35, 0.08);
+  border-color: rgba(245, 166, 35, 0.25);
+}
+
+.toast-danger {
+  background: rgba(232, 64, 64, 0.08);
+  border-color: rgba(232, 64, 64, 0.25);
+}
+
+.toast-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.toast-title {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: #1A2620;
+  margin-bottom: 2px;
+}
+
+.toast-desc {
+  font-size: var(--text-xs);
+  color: var(--silver-mid);
+  font-family: var(--font-mono);
+}
+
+/* ═══════════════════════════════════════════════════
+   SPACING SYSTEM
+═══════════════════════════════════════════════════ */
+.spacing-grid {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.spacing-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.spacing-block {
+  background: linear-gradient(135deg, var(--green-deep), var(--green-bright));
+  border-radius: 2px;
+  width: 12px;
+  opacity: 0.8;
+}
+
+.spacing-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--silver-mid);
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════
+   GRADIENTS
+═══════════════════════════════════════════════════ */
+.gradient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.gradient-card {
+  border-radius: var(--radius-lg);
+  height: 120px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--duration-base) var(--ease-spring);
+}
+
+.gradient-card:hover { transform: scale(1.03); }
+
+.gradient-label {
+  position: absolute;
+  bottom: var(--space-3);
+  left: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.1em;
+}
+
+/* ═══════════════════════════════════════════════════
+   MOTION SHOWCASE
+═══════════════════════════════════════════════════ */
+.motion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.motion-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.motion-demo {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--green-deep), var(--green-core));
+  border-radius: var(--radius-md);
+}
+
+.motion-name {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--silver-mid);
+  text-align: center;
+}
+
+/* Animations */
+.anim-pulse   { animation: animPulse 2s ease-in-out infinite; }
+.anim-float   { animation: animFloat 3s ease-in-out infinite; }
+.anim-spin    { animation: animSpin 3s linear infinite; }
+.anim-breathe { animation: animBreathe 3s ease-in-out infinite; }
+
+@keyframes animPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(29,184,99,0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(29,184,99,0); }
+}
+
+@keyframes animFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes animSpin {
+  from { transform: rotate(0deg); border-radius: var(--radius-md); }
+  25% { border-radius: var(--radius-full); }
+  50% { transform: rotate(180deg); border-radius: var(--radius-md); }
+  75% { border-radius: var(--radius-full); }
+  to { transform: rotate(360deg); border-radius: var(--radius-md); }
+}
+
+@keyframes animBreathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.9); opacity: 0.6; }
+}
+
+/* ═══════════════════════════════════════════════════
+   TOKENS REFERENCE TABLE
+═══════════════════════════════════════════════════ */
+.token-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.token-table th {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid #D0DDD5;
+  color: var(--green-deep);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.token-table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid #E5E9E7;
+  color: #4A5C54;
+  vertical-align: middle;
+}
+
+.token-table tr:last-child td { border-bottom: none; }
+.token-table tr:hover td { background: rgba(29, 184, 99, 0.04); }
+
+.token-preview {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  vertical-align: middle;
+  margin-right: var(--space-2);
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+.ds-footer {
+  padding: var(--space-12) 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ds-footer-logo {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 900;
+  color: #1A2620;
+}
+
+.ds-footer-logo span {
+  background: linear-gradient(135deg, var(--green-core), var(--green-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ds-footer-meta {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--silver-dark);
+  text-align: right;
+}
+
+/* ═══════════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════════ */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #D0DDD5, transparent);
+  margin: var(--space-8) 0;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #F5F7F6;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #4A5C54;
+}
+
+.tag.green { background: rgba(29,184,99,0.1); border-color: rgba(29,184,99,0.3); color: var(--green-bright); }
+
+.copy-hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--silver-dark);
+  margin-top: var(--space-2);
+  font-style: italic;
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--space-6); }
+@media (max-width: 768px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .type-row { grid-template-columns: 1fr; }
+  .hero-title { font-size: 2.5rem; }
+  .mobile-nav { width: 100%; }
+}
+
+/* ═══════════════════════════════════════════════════
+   WEB LANDING PAGE COMPONENTS
+═══════════════════════════════════════════════════ */
+
+/* Web Navbar */
+.web-navbar {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-xl);
+  padding: var(--space-4) var(--space-6);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 900px;
+  margin-bottom: var(--space-6);
+}
+
+.web-nav-links {
+  display: flex;
+  gap: var(--space-6);
+  list-style: none;
+}
+
+.web-nav-links a {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--silver-mid);
+  text-decoration: none;
+  transition: color var(--duration-fast);
+}
+
+.web-nav-links a:hover { color: #1A2620; }
+
+.web-nav-cta {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+/* Web Hero Block */
+.web-hero-block {
+  background: #FFFFFF;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-16) var(--space-12);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.web-hero-block::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(29,184,99,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.web-hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--green-core);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+}
+
+.web-hero-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  line-height: 0.95;
+  color: #1A2620;
+  margin-bottom: var(--space-5);
+}
+
+.web-hero-h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--green-core), var(--green-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.web-hero-desc {
+  font-size: var(--text-lg);
+  color: var(--silver-light);
+  max-width: 560px;
+  margin: 0 auto var(--space-8);
+  line-height: 1.7;
+}
+
+.web-hero-actions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+/* Pricing Cards */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+@media (max-width: 768px) { .pricing-grid { grid-template-columns: 1fr; } }
+
+.pricing-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  position: relative;
+  transition: all var(--duration-base) var(--ease-smooth);
+  box-shadow: var(--shadow-sm);
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.pricing-card.featured {
+  background: linear-gradient(135deg, rgba(236,253,243,1), rgba(209,250,229,0.5));
+  border-color: rgba(29,184,99,0.3);
+  box-shadow: 0 0 0 1px rgba(29,184,99,0.1), var(--shadow-glow);
+}
+
+.pricing-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--green-deep), var(--green-core));
+  color: white;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 16px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.pricing-plan {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--green-core);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+}
+
+.pricing-price {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 900;
+  color: #1A2620;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.pricing-price sup {
+  font-size: 1.25rem;
+  vertical-align: top;
+  margin-top: 8px;
+  font-weight: 600;
+  color: var(--silver-mid);
+}
+
+.pricing-period {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--silver-mid);
+  margin-bottom: var(--space-6);
+}
+
+.pricing-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+
+.pricing-features li {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--silver-light);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.pricing-features li::before {
+  content: '✓';
+  color: var(--green-core);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pricing-features li.dim { color: var(--silver-dark); }
+.pricing-features li.dim::before { content: '—'; color: var(--silver-dark); }
+
+/* Feature Cards (Web) */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+@media (max-width: 900px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .feature-grid { grid-template-columns: 1fr; } }
+
+.feature-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  transition: all var(--duration-base) var(--ease-smooth);
+  box-shadow: var(--shadow-sm);
+}
+
+.feature-card:hover {
+  border-color: rgba(29,184,99,0.3);
+  transform: translateY(-2px);
+}
+
+.feature-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  background: rgba(29,184,99,0.1);
+  border: 1px solid rgba(29,184,99,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: var(--space-4);
+}
+
+.feature-title {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: #1A2620;
+  margin-bottom: var(--space-2);
+}
+
+.feature-desc {
+  font-size: var(--text-sm);
+  color: var(--silver-mid);
+  line-height: 1.6;
+}
+
+/* Stat bar (Landing) */
+.stats-band {
+  background: #FFFFFF;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-xl);
+  padding: var(--space-8) var(--space-10);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  text-align: center;
+  margin-bottom: var(--space-8);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 768px) { .stats-band { grid-template-columns: 1fr 1fr; } }
+
+.stat-item { display: flex; flex-direction: column; gap: var(--space-1); }
+
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--green-core), var(--green-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.stat-desc {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--silver-mid);
+}
+
+/* Web Footer */
+.web-footer-block {
+  background: #F8FAF9;
+  border: 1px solid #E5E9E7;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-12) var(--space-10);
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+
+@media (max-width: 900px) { .web-footer-block { grid-template-columns: 1fr 1fr; } }
+
+.footer-brand-logo {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 900;
+  color: #1A2620;
+  margin-bottom: var(--space-3);
+}
+
+.footer-brand-logo span {
+  background: linear-gradient(135deg, var(--green-core), var(--green-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.footer-tagline {
+  font-size: var(--text-sm);
+  color: var(--silver-mid);
+  line-height: 1.6;
+  max-width: 260px;
+  margin-bottom: var(--space-5);
+}
+
+.footer-col-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--silver-pale);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.footer-links a {
+  font-size: var(--text-sm);
+  color: var(--silver-mid);
+  text-decoration: none;
+  transition: color var(--duration-fast);
+}
+
+.footer-links a:hover { color: var(--green-core); }
+
+/* ─── PRINT / PDF ────────────────────────────── */
+.print-btn {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  z-index: 1000;
+  background: linear-gradient(135deg, var(--green-deep), var(--green-core));
+  color: white;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 14px 24px;
+  cursor: pointer;
+  box-shadow: var(--shadow-glow);
+  transition: all var(--duration-base) var(--ease-spring);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.print-btn:hover { transform: scale(1.05); box-shadow: 0 0 32px rgba(29,184,99,0.5); }
+
+@media print {
+  .sticky-nav, .hero-scroll, .print-btn, .circuit-bg { display: none !important; }
+  body { background: white !important; color: #111 !important; }
+  section { page-break-inside: avoid; border-bottom: 1px solid #ddd !important; }
+  .hero { min-height: auto; padding: 40px 0; }
+  .hero-title, .section-title { color: #111 !important; }
+  .hero-title .accent, .web-hero-h1 em, .nav-logo span, .ds-footer-logo span { -webkit-text-fill-color: #1DB863 !important; }
+  .font-sample-display { color: #111 !important; }
+  .sensor-card, .plant-card, .pricing-card, .feature-card, .web-footer-block,
+  .swatch-info, .font-card, .web-hero-block, .stats-band, .web-navbar, .nav-demo, .mobile-nav {
+    background: #f8f8f8 !important;
+    border-color: #ddd !important;
+    color: #111 !important;
+  }
+  .swatch-color { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .gradient-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sensor-bar-fill, .progress-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .motion-demo { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  a { color: inherit !important; }
+}
+
+/* ─── STICKY NAV ─────────────────────────────── */
+.sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid #E5E9E7;
+  padding: var(--space-4) 0;
+}
+
+.sticky-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 900;
+  color: #1A2620;
+}
+
+.nav-logo span {
+  background: linear-gradient(135deg, var(--green-core), var(--green-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-6);
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--silver-mid);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color var(--duration-fast);
+}
+
+.nav-links a:hover { color: var(--green-core); }
+
+.ds-version {
+  background: #ECFDF3;
+  border: 1px solid #B8E6CC;
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--green-deep);
+}
+</style>
+</head>
+<body>
+
+<!-- ── STICKY NAVIGATION ── -->
+<nav class="sticky-nav">
+  <div class="container">
+    <div class="sticky-nav-inner">
+      <div class="nav-logo">Agri<span>One</span></div>
+      <ul class="nav-links">
+        <li><a href="#palette">Couleurs</a></li>
+        <li><a href="#typo">Typo</a></li>
+        <li><a href="#composants">Composants</a></li>
+        <li><a href="#iot">IoT</a></li>
+        <li><a href="#tokens">Tokens</a></li>
+      </ul>
+      <div class="ds-version">v1.0 · 2026</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="circuit-bg"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">Design System · AgriOne</div>
+      <h1 class="hero-title">
+        Bio<span class="accent">Digital</span><br>Interface
+      </h1>
+      <p class="hero-subtitle">
+        L'agriculture urbaine connectée mérite une interface aussi précise que la nature est intelligente — données de capteurs en temps réel, lisibilité absolue, esthétique forgée du sol et du silicium.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">5</div>
+          <div class="hero-stat-label">Couleurs primaires</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">3</div>
+          <div class="hero-stat-label">Typographies</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">9</div>
+          <div class="hero-stat-label">Sections app</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">∞</div>
+          <div class="hero-stat-label">Possibilités</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <div class="scroll-label">Scroll</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PALETTE
+══════════════════════════════════════════════════ -->
+<section id="palette">
+  <div class="container">
+    <div class="section-label">01 — Couleurs</div>
+    <h2 class="section-title">Palette de marque</h2>
+    <p class="section-sub">Extraite directement du logo AgriOne — gradient émeraude du circuit à la feuille.</p>
+
+    <div class="copy-hint">↑ Cliquez sur une couleur pour copier le code hex</div>
+
+    <div class="palette-group-title">── Verts primaires</div>
+    <div class="palette-grid" id="primary-swatches"></div>
+
+    <div class="palette-group-title">── Circuit / Tech</div>
+    <div class="palette-grid" id="silver-swatches"></div>
+
+    <div class="palette-group-title">── Sémantiques</div>
+    <div class="palette-grid" id="semantic-swatches"></div>
+
+    <div class="palette-group-title">── Fonds (Dark)</div>
+    <div class="palette-grid" id="bg-swatches"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     TYPOGRAPHIE
+══════════════════════════════════════════════════ -->
+<section id="typo">
+  <div class="container">
+    <div class="section-label">02 — Typographie</div>
+    <h2 class="section-title">Système typographique</h2>
+    <p class="section-sub">Trois polices distinctes pour trois rôles précis — display, lecture, données.</p>
+
+    <div class="grid-3">
+      <div class="font-card">
+        <div class="font-name">Unbounded <span class="font-role">Display</span></div>
+        <div class="font-sample-display">AgriOne</div>
+        <div style="margin-top:8px; color: var(--silver-mid); font-size:0.85rem; font-family: var(--font-body)">Titres, logotype, heroes</div>
+        <div class="font-weights">
+          <span class="weight-tag" style="font-family:var(--font-display);font-weight:400">400</span>
+          <span class="weight-tag" style="font-family:var(--font-display);font-weight:600">600</span>
+          <span class="weight-tag" style="font-family:var(--font-display);font-weight:700">700</span>
+          <span class="weight-tag" style="font-family:var(--font-display);font-weight:900">900</span>
+        </div>
+      </div>
+
+      <div class="font-card">
+        <div class="font-name">Figtree <span class="font-role">Body</span></div>
+        <div class="font-sample-body">Surveillez la croissance de vos plantes en temps réel avec une précision capteur maximale.</div>
+        <div class="font-weights">
+          <span class="weight-tag" style="font-family:var(--font-body);font-weight:300">300</span>
+          <span class="weight-tag" style="font-family:var(--font-body);font-weight:400">400</span>
+          <span class="weight-tag" style="font-family:var(--font-body);font-weight:500">500</span>
+          <span class="weight-tag" style="font-family:var(--font-body);font-weight:600">600</span>
+        </div>
+      </div>
+
+      <div class="font-card">
+        <div class="font-name">JetBrains Mono <span class="font-role">Data</span></div>
+        <div class="font-sample-mono">23.4°C · pH 6.2<br>84% · 450 lux</div>
+        <div style="margin-top:8px; color: var(--silver-mid); font-size:0.85rem; font-family: var(--font-body)">Valeurs capteurs, codes, IDs</div>
+        <div class="font-weights">
+          <span class="weight-tag" style="font-family:var(--font-mono);font-weight:400">400</span>
+          <span class="weight-tag" style="font-family:var(--font-mono);font-weight:500">500</span>
+          <span class="weight-tag" style="font-family:var(--font-mono);font-weight:700">700</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label" style="margin-top:0">Échelle typographique</div>
+    <div class="type-scale">
+      <div class="type-row">
+        <div class="type-meta">
+          <span class="type-token">display-hero</span>
+          <span class="type-spec">72px · 900 · 0.95lh</span>
+        </div>
+        <div style="font-family:var(--font-display);font-size:clamp(2rem,5vw,4.5rem);font-weight:900;color:#1A2620;line-height:0.95">Agri<span style="background:linear-gradient(135deg,var(--green-core),var(--green-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">One</span></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">
+          <span class="type-token">display-xl</span>
+          <span class="type-spec">48px · 700 · 1.1lh</span>
+        </div>
+        <div style="font-family:var(--font-display);font-size:clamp(1.5rem,4vw,3rem);font-weight:700;color:#1A2620">Agriculture Connectée</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">
+          <span class="type-token">display-lg</span>
+          <span class="type-spec">30px · 600 · 1.2lh</span>
+        </div>
+        <div style="font-family:var(--font-display);font-size:1.875rem;font-weight:600;color:#1A2620">Tableau de bord</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">
+          <span class="type-token">body-lg</span>
+          <span class="type-spec">18px · 400 · 1.7lh</span>
+        </div>
+        <div style="font-family:var(--font-body);font-size:1.125rem;color:var(--silver-light)">Vos cultures se portent bien. La température est stable à 23.4°C et l'humidité optimale.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">
+          <span class="type-token">body-base</span>
+          <span class="type-spec">16px · 400 · 1.6lh</span>
+        </div>
+        <div style="font-family:var(--font-body);font-size:1rem;color:var(--silver-mid)">Dernière intervention : arrosage automatique — il y a 2h14</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">
+          <span class="type-token">data-xl</span>
+          <span class="type-spec">36px · 700 · mono</span>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:2.25rem;font-weight:700;color:var(--green-core)">23.4<span style="font-size:1rem;font-weight:400;color:var(--silver-mid);margin-left:4px">°C</span></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">
+          <span class="type-token">label</span>
+          <span class="type-spec">11px · 500 · 0.12em ls · mono</span>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--silver-mid)">TEMPÉRATURE · CAPTEUR A1</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     IoT SENSOR CARDS
+══════════════════════════════════════════════════ -->
+<section id="iot">
+  <div class="container">
+    <div class="section-label">03 — Composants IoT</div>
+    <h2 class="section-title">Cartes capteurs</h2>
+    <p class="section-sub">Interface centrale de l'app — les données de terrain, lisibles au premier coup d'œil.</p>
+
+    <div class="sensor-grid">
+      <div class="sensor-card">
+        <div class="sensor-icon">🌡️</div>
+        <div class="sensor-label">Température</div>
+        <div><span class="sensor-value">23.4</span><span class="sensor-unit"> °C</span></div>
+        <div class="sensor-bar"><div class="sensor-bar-fill" style="width:72%"></div></div>
+        <div class="sensor-trend"><span class="trend-up">↑ +0.3°</span> depuis 1h</div>
+      </div>
+
+      <div class="sensor-card">
+        <div class="sensor-icon">💧</div>
+        <div class="sensor-label">Humidité sol</div>
+        <div><span class="sensor-value">84</span><span class="sensor-unit"> %</span></div>
+        <div class="sensor-bar"><div class="sensor-bar-fill" style="width:84%"></div></div>
+        <div class="sensor-trend"><span class="trend-stable">→ Stable</span> depuis 30min</div>
+      </div>
+
+      <div class="sensor-card warning">
+        <div class="sensor-icon">⚗️</div>
+        <div class="sensor-label">Niveau pH</div>
+        <div><span class="sensor-value">7.8</span><span class="sensor-unit"> pH</span></div>
+        <div class="sensor-bar"><div class="sensor-bar-fill" style="width:78%;background:linear-gradient(90deg,#B86A00,var(--warning))"></div></div>
+        <div class="sensor-trend" style="color:var(--warning)">⚠ Hors plage optimale (6–7)</div>
+      </div>
+
+      <div class="sensor-card">
+        <div class="sensor-icon">☀️</div>
+        <div class="sensor-label">Luminosité</div>
+        <div><span class="sensor-value">450</span><span class="sensor-unit"> lux</span></div>
+        <div class="sensor-bar"><div class="sensor-bar-fill" style="width:45%"></div></div>
+        <div class="sensor-trend"><span class="trend-up">↑ Cycle jour</span> actif</div>
+      </div>
+
+      <div class="sensor-card danger">
+        <div class="sensor-icon">💨</div>
+        <div class="sensor-label">CO₂</div>
+        <div><span class="sensor-value">1840</span><span class="sensor-unit"> ppm</span></div>
+        <div class="sensor-bar"><div class="sensor-bar-fill" style="width:92%;background:linear-gradient(90deg,#8B0000,var(--danger))"></div></div>
+        <div class="sensor-trend" style="color:var(--danger)">⛔ Critique — aérer maintenant</div>
+      </div>
+
+      <div class="sensor-card">
+        <div class="sensor-icon">🌱</div>
+        <div class="sensor-label">Nutriments</div>
+        <div><span class="sensor-value">1.2</span><span class="sensor-unit"> EC</span></div>
+        <div class="sensor-bar"><div class="sensor-bar-fill" style="width:60%"></div></div>
+        <div class="sensor-trend"><span class="trend-stable">→ Optimal</span> recommandé</div>
+      </div>
+    </div>
+
+    <!-- Plant Cards -->
+    <div class="section-label" style="margin-top:var(--space-10)">Cartes plantes</div>
+    <div class="plant-grid">
+      <div class="plant-card">
+        <div class="plant-card-image">🌿</div>
+        <div class="plant-card-body">
+          <div class="plant-name">Basilic Genovese</div>
+          <div class="plant-variety">ZONE A · MODULE 01</div>
+          <div class="plant-metrics">
+            <div class="plant-metric">
+              <div class="plant-metric-value">J+14</div>
+              <div class="plant-metric-label">Âge</div>
+            </div>
+            <div class="plant-metric">
+              <div class="plant-metric-value">8.4cm</div>
+              <div class="plant-metric-label">Taille</div>
+            </div>
+            <div class="plant-metric">
+              <div class="plant-metric-value">+2°</div>
+              <div class="plant-metric-label">Récolte</div>
+            </div>
+          </div>
+          <div class="plant-progress-label">
+            <span class="progress-name">Croissance</span>
+            <span class="progress-pct">68%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:68%"></div></div>
+        </div>
+      </div>
+
+      <div class="plant-card">
+        <div class="plant-card-image">🥬</div>
+        <div class="plant-card-body">
+          <div class="plant-name">Laitue Batavia</div>
+          <div class="plant-variety">ZONE B · MODULE 03</div>
+          <div class="plant-metrics">
+            <div class="plant-metric">
+              <div class="plant-metric-value">J+21</div>
+              <div class="plant-metric-label">Âge</div>
+            </div>
+            <div class="plant-metric">
+              <div class="plant-metric-value">12.1cm</div>
+              <div class="plant-metric-label">Taille</div>
+            </div>
+            <div class="plant-metric">
+              <div class="plant-metric-value">✓ Prête</div>
+              <div class="plant-metric-label">Récolte</div>
+            </div>
+          </div>
+          <div class="plant-progress-label">
+            <span class="progress-name">Croissance</span>
+            <span class="progress-pct">100%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+        </div>
+      </div>
+
+      <div class="plant-card">
+        <div class="plant-card-image">🍅</div>
+        <div class="plant-card-body">
+          <div class="plant-name">Tomate Cerise</div>
+          <div class="plant-variety">ZONE C · MODULE 07</div>
+          <div class="plant-metrics">
+            <div class="plant-metric">
+              <div class="plant-metric-value">J+45</div>
+              <div class="plant-metric-label">Âge</div>
+            </div>
+            <div class="plant-metric">
+              <div class="plant-metric-value">34.0cm</div>
+              <div class="plant-metric-label">Taille</div>
+            </div>
+            <div class="plant-metric">
+              <div class="plant-metric-value">J+12</div>
+              <div class="plant-metric-label">Récolte</div>
+            </div>
+          </div>
+          <div class="plant-progress-label">
+            <span class="progress-name">Croissance</span>
+            <span class="progress-pct">82%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:82%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     COMPOSANTS
+══════════════════════════════════════════════════ -->
+<section id="composants">
+  <div class="container">
+    <div class="section-label">04 — Composants</div>
+    <h2 class="section-title">Bibliothèque UI</h2>
+    <p class="section-sub">Boutons, badges, formulaires, navigation — cohérents sur toute l'app.</p>
+
+    <!-- Buttons -->
+    <div class="palette-group-title">── Boutons</div>
+    <div class="component-row">
+      <button class="btn btn-primary">Arroser maintenant</button>
+      <button class="btn btn-primary btn-lg">Démarrer la culture</button>
+      <button class="btn btn-primary btn-sm">Scanner</button>
+    </div>
+    <div class="component-row">
+      <button class="btn btn-secondary">Voir les détails</button>
+      <button class="btn btn-ghost">Paramètres</button>
+      <button class="btn btn-danger">Arrêt d'urgence</button>
+    </div>
+
+    <!-- Badges -->
+    <div class="palette-group-title">── Badges de statut</div>
+    <div class="badge-row">
+      <span class="badge badge-active">Actif</span>
+      <span class="badge badge-growth">En croissance</span>
+      <span class="badge badge-warning">Surveillance</span>
+      <span class="badge badge-danger">Critique</span>
+      <span class="badge badge-info">Mise à jour</span>
+      <span class="badge badge-offline">Hors ligne</span>
+    </div>
+
+    <!-- Inputs -->
+    <div class="palette-group-title">── Champs de saisie</div>
+    <div class="field-group">
+      <div class="field">
+        <label class="field-label">Nom de la culture</label>
+        <input class="field-input" type="text" placeholder="ex: Basilic Genovese">
+        <span class="field-hint">Choisissez un nom reconnaissable pour cette zone.</span>
+      </div>
+      <div class="field">
+        <label class="field-label">Température cible</label>
+        <input class="field-input success" type="text" value="22°C">
+        <span class="field-hint success-hint">✓ Valeur dans la plage optimale (18–28°C)</span>
+      </div>
+      <div class="field">
+        <label class="field-label">Niveau pH cible</label>
+        <input class="field-input error" type="text" value="8.5">
+        <span class="field-hint error-hint">⚠ Valeur hors plage — recommandé : 6.0 à 7.0</span>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="palette-group-title" style="margin-top:var(--space-8)">── Navigation onglets</div>
+    <div class="nav-demo">
+      <button class="nav-tab active">🌱 Cultures</button>
+      <button class="nav-tab">📡 Capteurs</button>
+      <button class="nav-tab">🛒 Marché</button>
+      <button class="nav-tab">📊 Stats</button>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <div class="palette-group-title">── Navigation mobile (bottom bar)</div>
+    <div class="mobile-nav">
+      <button class="nav-item active">
+        <span class="nav-icon">🌿</span>
+        <span>Cultures</span>
+      </button>
+      <button class="nav-item">
+        <span class="nav-icon">📡</span>
+        <span>IoT</span>
+      </button>
+      <button class="nav-item">
+        <span class="nav-icon">🛒</span>
+        <span>Marché</span>
+      </button>
+      <button class="nav-item">
+        <span class="nav-icon">👥</span>
+        <span>Communauté</span>
+      </button>
+      <button class="nav-item">
+        <span class="nav-icon">👤</span>
+        <span>Profil</span>
+      </button>
+    </div>
+
+    <!-- Toasts -->
+    <div class="palette-group-title">── Notifications / Toasts</div>
+    <div class="toast-stack">
+      <div class="toast toast-success" style="animation-delay:0s">
+        <div class="toast-icon">✅</div>
+        <div>
+          <div class="toast-title">Récolte prête !</div>
+          <div class="toast-desc">Laitue Batavia · Zone B · Module 03</div>
+        </div>
+      </div>
+      <div class="toast toast-warning" style="animation-delay:0.1s">
+        <div class="toast-icon">⚠️</div>
+        <div>
+          <div class="toast-title">pH hors plage</div>
+          <div class="toast-desc">Valeur actuelle 7.8 — cible 6.0–7.0</div>
+        </div>
+      </div>
+      <div class="toast toast-danger" style="animation-delay:0.2s">
+        <div class="toast-icon">🚨</div>
+        <div>
+          <div class="toast-title">CO₂ critique — 1840 ppm</div>
+          <div class="toast-desc">Aérer immédiatement · Zone C</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     GRADIENTS
+══════════════════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">05 — Gradients</div>
+    <h2 class="section-title">Gradients de marque</h2>
+
+    <div class="gradient-grid">
+      <div class="gradient-card" style="background:linear-gradient(180deg,#0F7A4A,#2DB866,#42C97A)">
+        <div class="gradient-label">Logo vertical</div>
+      </div>
+      <div class="gradient-card" style="background:linear-gradient(135deg,#1E8C5A,#2DB866)">
+        <div class="gradient-label">CTA horizontal</div>
+      </div>
+      <div class="gradient-card" style="background:linear-gradient(135deg,#0F7A4A,#1E8C5A,#2DB866)">
+        <div class="gradient-label">Card hero</div>
+      </div>
+      <div class="gradient-card" style="background:linear-gradient(180deg,#0A1F13,#122B1C)">
+        <div class="gradient-label">Fond dark</div>
+      </div>
+      <div class="gradient-card" style="background:linear-gradient(135deg,rgba(29,184,99,0.15),rgba(66,217,126,0.05))">
+        <div class="gradient-label">Overlay card</div>
+      </div>
+      <div class="gradient-card" style="background:radial-gradient(ellipse at 30% 40%,rgba(29,184,99,0.2),transparent 70%),#080F0A">
+        <div class="gradient-label">Blob accent</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MOTION
+══════════════════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">06 — Motion</div>
+    <h2 class="section-title">Animations</h2>
+    <p class="section-sub">Des micro-interactions pensées pour l'IoT — respiration des capteurs, alertes pulsantes.</p>
+
+    <div class="motion-grid">
+      <div class="motion-card">
+        <div class="motion-demo anim-pulse"></div>
+        <div class="motion-name">Pulse · Capteur actif<br>2s · ease-in-out</div>
+      </div>
+      <div class="motion-card">
+        <div class="motion-demo anim-float"></div>
+        <div class="motion-name">Float · Cards hero<br>3s · ease-in-out</div>
+      </div>
+      <div class="motion-card">
+        <div class="motion-demo anim-spin"></div>
+        <div class="motion-name">Morph · Chargement<br>3s · linear</div>
+      </div>
+      <div class="motion-card">
+        <div class="motion-demo anim-breathe"></div>
+        <div class="motion-name">Breathe · Alerte<br>3s · ease-in-out</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="palette-group-title">── Courbes d'animation</div>
+    <div class="component-row">
+      <div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--silver-mid);margin-bottom:4px">ease-spring</div>
+        <code style="font-family:var(--font-mono);font-size:11px;color:var(--green-core)">cubic-bezier(0.34, 1.56, 0.64, 1)</code>
+        <div style="font-size:11px;color:var(--silver-dark);margin-top:2px">Boutons, cartes, dropdowns</div>
+      </div>
+      <div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--silver-mid);margin-bottom:4px">ease-smooth</div>
+        <code style="font-family:var(--font-mono);font-size:11px;color:var(--green-core)">cubic-bezier(0.4, 0, 0.2, 1)</code>
+        <div style="font-size:11px;color:var(--silver-dark);margin-top:2px">Transitions de page, fades</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SPACING
+══════════════════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">07 — Espacement</div>
+    <h2 class="section-title">Grille 8px</h2>
+
+    <div class="spacing-grid">
+      <div class="spacing-item">
+        <div class="spacing-block" style="height:4px"></div>
+        <div class="spacing-label">1<br>4px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-block" style="height:8px"></div>
+        <div class="spacing-label">2<br>8px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-block" style="height:12px"></div>
+        <div class="spacing-label">3<br>12px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-block" style="height:16px"></div>
+        <div class="spacing-label">4<br>16px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-block" style="height:24px"></div>
+        <div class="spacing-label">6<br>24px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-block" style="height:32px"></div>
+        <div class="spacing-label">8<br>32px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-block" style="height:48px"></div>
+        <div class="spacing-label">12<br>48px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-block" style="height:64px"></div>
+        <div class="spacing-label">16<br>64px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-block" style="height:80px"></div>
+        <div class="spacing-label">20<br>80px</div>
+      </div>
+      <div class="spacing-item">
+        <div class="spacing-block" style="height:96px"></div>
+        <div class="spacing-label">24<br>96px</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     WEB LANDING PAGE
+══════════════════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">09 — Web Landing Page</div>
+    <h2 class="section-title">Composants Web</h2>
+    <p class="section-sub">Layouts et composants spécifiques à la landing page marketing agrione.fr</p>
+
+    <!-- Web Navbar -->
+    <div class="palette-group-title">── Navbar web (floating)</div>
+    <div class="web-navbar">
+      <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:900;color:#1A2620">
+        Agri<span style="background:linear-gradient(135deg,var(--green-core),var(--green-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">One</span>
+      </div>
+      <ul class="web-nav-links">
+        <li><a href="#">Fonctionnalités</a></li>
+        <li><a href="#">Marketplace</a></li>
+        <li><a href="#">Tarifs</a></li>
+        <li><a href="#">À propos</a></li>
+      </ul>
+      <div class="web-nav-cta">
+        <button class="btn btn-ghost btn-sm">Connexion</button>
+        <button class="btn btn-primary btn-sm">Démarrer</button>
+      </div>
+    </div>
+
+    <!-- Web Hero -->
+    <div class="palette-group-title">── Hero landing</div>
+    <div class="web-hero-block">
+      <div class="circuit-bg"></div>
+      <div class="web-hero-eyebrow">🌱 Agriculture urbaine connectée — Paris, 2026</div>
+      <h2 class="web-hero-h1">
+        Cultivez l'avenir.<br><em>Mesurez tout.</em>
+      </h2>
+      <p class="web-hero-desc">
+        AgriOne connecte vos cultures à l'intelligence artificielle. Capteurs IoT, pilotage automatique, marketplace de récoltes — tout dans une seule app.
+      </p>
+      <div class="web-hero-actions">
+        <button class="btn btn-primary btn-lg">Commencer gratuitement</button>
+        <button class="btn btn-secondary btn-lg">Voir une démo</button>
+      </div>
+    </div>
+
+    <!-- Stats Band -->
+    <div class="palette-group-title">── Chiffres clés (stats band)</div>
+    <div class="stats-band">
+      <div class="stat-item">
+        <div class="stat-num">2.4k</div>
+        <div class="stat-desc">Cultivateurs actifs</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">98%</div>
+        <div class="stat-desc">Satisfaction client</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">−40%</div>
+        <div class="stat-desc">Eau économisée</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">50+</div>
+        <div class="stat-desc">Variétés supportées</div>
+      </div>
+    </div>
+
+    <!-- Feature Grid -->
+    <div class="palette-group-title">── Grille de fonctionnalités</div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon-wrap">📡</div>
+        <div class="feature-title">IoT en temps réel</div>
+        <div class="feature-desc">Température, pH, humidité, CO₂ — tous vos capteurs synchronisés toutes les 30 secondes.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">🤖</div>
+        <div class="feature-title">IA d'optimisation</div>
+        <div class="feature-desc">L'assistant IA analyse vos données et propose des réglages pour maximiser vos rendements.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">🛒</div>
+        <div class="feature-title">Marketplace intégrée</div>
+        <div class="feature-desc">Vendez vos récoltes directement aux restaurants, hôtels et particuliers de votre zone.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">⚡</div>
+        <div class="feature-title">Pilotage automatique</div>
+        <div class="feature-desc">Arrosage, LEDs, nutriments — configurez les seuils une fois, l'app fait le reste.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">👥</div>
+        <div class="feature-title">Communauté</div>
+        <div class="feature-desc">Partagez vos récoltes, rejoignez des groupes de cultivateurs et progressez ensemble.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-wrap">📊</div>
+        <div class="feature-title">Rapports & exports</div>
+        <div class="feature-desc">Statistiques de rendement, bilan écologique, export CSV pour votre comptabilité.</div>
+      </div>
+    </div>
+
+    <!-- Pricing Cards -->
+    <div class="palette-group-title">── Tarification</div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-plan">Basic</div>
+        <div class="pricing-price"><sup>€</sup>49</div>
+        <div class="pricing-period">/ mois · par module</div>
+        <ul class="pricing-features">
+          <li>Jusqu'à 6 zones de culture</li>
+          <li>IA de base</li>
+          <li>Rapports mensuels</li>
+          <li>App mobile iOS + Android</li>
+          <li class="dim">Support 24/7</li>
+          <li class="dim">Analyse prédictive</li>
+        </ul>
+        <button class="btn btn-secondary" style="width:100%">Démarrer</button>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge">★ Le plus populaire</div>
+        <div class="pricing-plan">Pro</div>
+        <div class="pricing-price"><sup>€</sup>149</div>
+        <div class="pricing-period">/ mois · par installation</div>
+        <ul class="pricing-features">
+          <li>À partir de 12 zones</li>
+          <li>IA avancée + prédictive</li>
+          <li>Pilotage automatique complet</li>
+          <li>Support 24/7 prioritaire</li>
+          <li>Rapports hebdomadaires</li>
+          <li>Marketplace Pro vendeur</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%">Choisir Pro</button>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-plan">Enterprise</div>
+        <div class="pricing-price" style="font-size:2rem">Sur mesure</div>
+        <div class="pricing-period">Devis personnalisé</div>
+        <ul class="pricing-features">
+          <li>Infrastructure sur site</li>
+          <li>DPO dédié (RGPD)</li>
+          <li>Installation et formation</li>
+          <li>API B2B + intégrations ERP</li>
+          <li>SLA garanti</li>
+          <li>Modules distributeurs auto</li>
+        </ul>
+        <button class="btn btn-ghost" style="width:100%">Nous contacter</button>
+      </div>
+    </div>
+
+    <!-- Web Footer -->
+    <div class="palette-group-title">── Footer web</div>
+    <div class="web-footer-block">
+      <div>
+        <div class="footer-brand-logo">Agri<span>One</span></div>
+        <p class="footer-tagline">Cultivez plus intelligemment. Vendez local. Impactez moins la planète.</p>
+        <div class="badge-row">
+          <span class="badge badge-active">App disponible</span>
+          <span class="badge badge-info">iOS · Android</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Produit</div>
+        <ul class="footer-links">
+          <li><a href="#">Fonctionnalités</a></li>
+          <li><a href="#">Marketplace</a></li>
+          <li><a href="#">Tarifs</a></li>
+          <li><a href="#">API &amp; B2B</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Ressources</div>
+        <ul class="footer-links">
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Tutoriels</a></li>
+          <li><a href="#">Communauté</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Légal</div>
+        <ul class="footer-links">
+          <li><a href="#">CGV · CGU</a></li>
+          <li><a href="#">Confidentialité</a></li>
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     TOKENS TABLE
+══════════════════════════════════════════════════ -->
+<section id="tokens">
+  <div class="container">
+    <div class="section-label">08 — Tokens React Native</div>
+    <h2 class="section-title">Design Tokens</h2>
+    <p class="section-sub">Variables prêtes à importer dans <code style="font-family:var(--font-mono);color:var(--green-core);font-size:0.9em">theme.ts</code> pour votre app Expo.</p>
+
+    <table class="token-table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>Valeur</th>
+          <th>Aperçu</th>
+          <th>Usage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>colors.emeraldDeep</td><td>#0F7A4A</td><td><span class="token-preview" style="background:#0F7A4A"></span></td><td>Contours, CTA hover</td></tr>
+        <tr><td>colors.greenCore</td><td>#1DB863</td><td><span class="token-preview" style="background:#1DB863"></span></td><td>Couleur principale, boutons</td></tr>
+        <tr><td>colors.greenBright</td><td>#42D97E</td><td><span class="token-preview" style="background:#42D97E"></span></td><td>Accents, badges actifs</td></tr>
+        <tr><td>colors.bgPrimary</td><td>#080F0A</td><td><span class="token-preview" style="background:#080F0A;border-color:rgba(255,255,255,0.15)"></span></td><td>Fond principal dark</td></tr>
+        <tr><td>colors.bgSurface</td><td>#0F2115</td><td><span class="token-preview" style="background:#0F2115;border-color:rgba(255,255,255,0.1)"></span></td><td>Cards, surfaces</td></tr>
+        <tr><td>colors.bgBorder</td><td>#1E3D27</td><td><span class="token-preview" style="background:#1E3D27;border-color:rgba(255,255,255,0.1)"></span></td><td>Bordures, séparateurs</td></tr>
+        <tr><td>colors.textPrimary</td><td>#FFFFFF</td><td><span class="token-preview" style="background:#fff"></span></td><td>Titres, valeurs clés</td></tr>
+        <tr><td>colors.textSecondary</td><td>#A8B8B0</td><td><span class="token-preview" style="background:#A8B8B0"></span></td><td>Labels, descriptions</td></tr>
+        <tr><td>colors.warning</td><td>#F5A623</td><td><span class="token-preview" style="background:#F5A623"></span></td><td>Alertes pH, température</td></tr>
+        <tr><td>colors.danger</td><td>#E84040</td><td><span class="token-preview" style="background:#E84040"></span></td><td>Erreurs critiques</td></tr>
+        <tr><td>spacing.md</td><td>16</td><td>—</td><td>Padding cards, gaps</td></tr>
+        <tr><td>spacing.lg</td><td>24</td><td>—</td><td>Sections, headers</td></tr>
+        <tr><td>radius.card</td><td>16</td><td>—</td><td>Cards plantes, IoT</td></tr>
+        <tr><td>radius.button</td><td>12</td><td>—</td><td>Tous les boutons</td></tr>
+        <tr><td>fontFamily.display</td><td>Unbounded</td><td>—</td><td>Titres, logotype</td></tr>
+        <tr><td>fontFamily.body</td><td>Figtree</td><td>—</td><td>Texte courant</td></tr>
+        <tr><td>fontFamily.mono</td><td>JetBrains Mono</td><td>—</td><td>Données capteurs</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="container">
+  <div class="ds-footer">
+    <div class="ds-footer-logo">Agri<span>One</span></div>
+    <div class="ds-footer-meta">
+      Design System v1.0<br>
+      Agriculture Urbaine Connectée<br>
+      <span style="color:var(--green-core)">Tony Ha · Arthur Djian</span>
+    </div>
+  </div>
+</div>
+
+<!-- Print / PDF Button -->
+<button class="print-btn" onclick="window.print()">
+  <span>⬇</span> Exporter en PDF
+</button>
+
+<script>
+// ── PALETTE DATA ──────────────────────────────────
+const palettes = {
+  'primary-swatches': [
+    { name: 'Emerald Deep',  hex: '#0F7A4A', usage: 'Contours, CTA fort' },
+    { name: 'Forest Green',  hex: '#1E8C5A', usage: 'Gradient intermédiaire' },
+    { name: 'Leaf Green',    hex: '#1DB863', usage: 'Couleur principale ★' },
+    { name: 'Fresh Green',   hex: '#42D97E', usage: 'Accents, badges' },
+    { name: 'Nature Light',  hex: '#7DD9A3', usage: 'Fonds légers, tags' },
+    { name: 'Mist Green',    hex: '#C2F5D8', usage: 'Tints, highlights' },
+  ],
+  'silver-swatches': [
+    { name: 'Circuit Silver', hex: '#A8AAAD', usage: 'Icônes inactives' },
+    { name: 'Text Gray',      hex: '#888B8D', usage: 'Labels secondaires' },
+    { name: 'Slate Dark',     hex: '#3D4246', usage: 'Bordures claires' },
+  ],
+  'semantic-swatches': [
+    { name: 'Success',  hex: '#1DB863', usage: 'Confirmation, récolte' },
+    { name: 'Warning',  hex: '#F5A623', usage: 'pH, température hors plage' },
+    { name: 'Danger',   hex: '#E84040', usage: 'Capteur critique' },
+    { name: 'Info',     hex: '#3B9BF6', usage: 'Notifications' },
+  ],
+  'bg-swatches': [
+    { name: 'Deep Earth',    hex: '#080F0A', usage: 'Fond principal' },
+    { name: 'Night Forest',  hex: '#0D1A0F', usage: 'Fond secondaire' },
+    { name: 'Moss Surface',  hex: '#0F2115', usage: 'Cards, surfaces' },
+    { name: 'Dark Border',   hex: '#1E3D27', usage: 'Bordures, séparateurs' },
+  ]
+};
+
+// Render swatches
+Object.entries(palettes).forEach(([id, colors]) => {
+  const container = document.getElementById(id);
+  if (!container) return;
+  colors.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'swatch';
+    el.innerHTML = `
+      <div class="swatch-color" style="background:${c.hex}"></div>
+      <div class="swatch-info">
+        <span class="swatch-name">${c.name}</span>
+        <span class="swatch-hex">${c.hex}</span>
+        <span class="swatch-usage">${c.usage}</span>
+      </div>
+    `;
+    el.addEventListener('click', () => {
+      navigator.clipboard?.writeText(c.hex);
+      el.classList.add('copied');
+      setTimeout(() => el.classList.remove('copied'), 1500);
+    });
+    container.appendChild(el);
+  });
+});
+
+// Tab interaction
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', e => {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    e.currentTarget.classList.add('active');
+  });
+});
+
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', e => {
+    document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
+    e.currentTarget.classList.add('active');
+  });
+});
+
+// Animate sensor bars on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.sensor-bar-fill').forEach(b => {
+        b.style.animation = 'none';
+        b.offsetHeight;
+        b.style.animation = '';
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.sensor-grid').forEach(g => observer.observe(g));
+</script>
+</body>
+</html>
